@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>高考英语听力练习</title>
+<style>
+:root{--accent:#2563eb;--accent-2:#1d4ed8;--bg:#eef1f6;--card:#ffffff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;--green:#16a34a;--green-bg:#ecfdf5;--red:#dc2626;--red-bg:#fef2f2;--amber-bg:#fffbeb;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.5;}
+#app{max-width:860px;margin:0 auto;padding:14px 14px 110px;}
+.hero{background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;border-radius:18px;padding:20px;margin-bottom:14px;}
+.hero h1{margin:0 0 6px;font-size:23px;}
+.hero p{margin:0 0 12px;opacity:.92;font-size:13.5px;}
+.stats span{display:inline-block;background:rgba(255,255,255,.18);border-radius:999px;padding:4px 12px;margin-right:8px;font-size:13px;}
+.hero-actions{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
+.hero-actions .btn{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.35);color:#fff;}
+.hero-actions .btn:hover{background:rgba(255,255,255,.28);}
+.search-wrap{margin-bottom:16px;}
+.search-wrap input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font:inherit;font-size:15px;background:var(--card);}
+.search-wrap input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+.year{margin-bottom:20px;}
+.year-h{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.03em;margin:0 2px 10px;}
+.papers{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:10px;}
+.paper{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .1s,box-shadow .1s,transform .06s;}
+.paper:hover{border-color:#bfdbfe;box-shadow:0 6px 18px rgba(37,99,235,.10);}
+.paper:active{transform:scale(.985);}
+.paper-t{font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.paper-p{font-size:12.5px;color:var(--accent);margin-top:3px;}
+.badge{font-size:11px;background:var(--amber-bg);color:#b45309;border-radius:6px;padding:2px 7px;font-weight:700;}
+.badge.src{background:#ede9fe;color:#6d28d9;}
+.paper-m{font-size:12.5px;color:var(--muted);margin-top:6px;}
+.paper-s{font-size:12.5px;margin-top:6px;color:var(--muted);line-height:1.5;}
+.paper-s .done{color:var(--green);font-weight:600;}
+.paper-s .todo{color:var(--muted);}
+.paper-s .wrong{color:var(--red);font-weight:600;}
+.sr-sec{font-size:13px;font-weight:700;color:var(--muted);margin:0 2px 8px;}
+.sr-sec .count{background:#e0e7ff;color:var(--accent);border-radius:999px;padding:1px 8px;font-size:12px;margin-left:4px;}
+.sr-empty{color:var(--muted);font-size:14px;padding:10px 2px 18px;}
+.qlist{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.qitem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;font:inherit;color:inherit;}
+.qitem:hover{border-color:#bfdbfe;}
+.qi-top{display:flex;gap:8px;align-items:center;margin-bottom:4px;font-size:12.5px;color:var(--muted);}
+.qi-p{font-weight:600;color:var(--accent);}
+.qi-s{font-size:14.5px;line-height:1.5;}
+mark{background:#fde68a;color:inherit;border-radius:3px;padding:0 1px;}
+.foot{margin-top:26px;text-align:center;}
+.btn{font:inherit;font-size:14px;border-radius:10px;padding:8px 14px;cursor:pointer;border:1px solid transparent;}
+.btn.primary{background:var(--accent);color:#fff;}
+.btn.primary:hover{background:var(--accent-2);}
+.btn.ghost{background:transparent;border-color:var(--line);color:var(--text);}
+.btn.ghost:hover{background:#fff;}
+.topbar{position:sticky;top:0;z-index:6;display:flex;align-items:center;gap:8px;background:var(--bg);padding:8px 0 10px;margin-bottom:12px;}
+.topbar-t{flex:1;min-width:0;}
+.topbar-t .t1{font-weight:700;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.topbar-t .t2{font-size:12.5px;color:var(--muted);}
+.player-card{position:sticky;top:54px;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 2px 12px rgba(0,0,0,.05);margin-bottom:12px;}
+audio{width:100%;display:block;}
+.prow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.chip{border:1px solid var(--line);background:#f8fafc;color:var(--text);border-radius:8px;padding:5px 10px;font-size:13px;cursor:pointer;font:inherit;}
+.chip:hover{border-color:#bfdbfe;}
+.chip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.sep{width:1px;height:18px;background:var(--line);margin:0 4px;}
+.abinfo{font-size:12px;color:var(--muted);margin-left:2px;}
+.audiohint{font-size:12.5px;color:var(--red);margin-top:8px;display:none;}
+.tabs{display:flex;gap:8px;margin-bottom:12px;}
+.tab{flex:1;text-align:center;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:14px;cursor:pointer;color:var(--text);}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px;}
+.sec h2{margin:0 0 8px;font-size:16.5px;}
+.sec-sub{font-size:12.5px;font-weight:400;color:var(--muted);}
+.intro{font-size:13px;color:var(--muted);margin:0 0 4px;line-height:1.7;}
+.q{padding:12px 0 0;}
+.q+.q{border-top:1px solid var(--line);margin-top:12px;padding-top:14px;}
+.q-head{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
+.q-num{flex:none;width:24px;height:24px;border-radius:50%;background:#eef2ff;color:var(--accent);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:1px;position:relative;}
+.q-num.had-wrong::after{content:'';position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid #fff;}
+.q-stem{font-weight:600;font-size:15px;line-height:1.55;}
+.opts{display:flex;flex-direction:column;gap:6px;padding-left:34px;}
+.opt{display:flex;align-items:flex-start;gap:10px;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:9px 12px;text-align:left;cursor:pointer;font:inherit;font-size:14.5px;line-height:1.55;color:inherit;width:100%;}
+.opt:hover{border-color:#bfdbfe;background:#eff6ff;}
+.opt .ol{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid #cbd5e1;color:#64748b;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+.opt.sel{border-color:var(--accent);background:#eff6ff;}
+.opt.sel .ol{background:var(--accent);border-color:var(--accent);color:#fff;}
+.q-result{font-size:13px;margin:7px 0 0 34px;min-height:18px;}
+.q.correct .q-result{color:var(--green);font-weight:600;}
+.q.wrong .q-result{color:var(--red);}
+.q.correct .opt.sel{border-color:var(--green);background:var(--green-bg);}
+.q.correct .opt.sel .ol{background:var(--green);border-color:var(--green);}
+.q.wrong .opt.sel{border-color:var(--red);background:var(--red-bg);}
+.q.wrong .opt.sel .ol{background:var(--red);border-color:var(--red);}
+.q.wrong .opt.answer{border-color:var(--green);background:var(--green-bg);}
+.q.wrong .opt.answer .ol{background:var(--green);border-color:var(--green);color:#fff;}
+#tabbody.filter-wrong .q.correct{display:none;}
+.page-img{width:100%;display:block;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:#fff;}
+.hint{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
+.transcript{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px;}
+.transcript h2{margin:0 0 10px;font-size:16.5px;}
+.transcript details{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fbfcfe;}
+.transcript summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:14px;color:var(--accent);}
+.transcript .tl{padding:2px 14px 12px;}
+.tl-line{margin:6px 0;font-size:14px;line-height:1.6;}
+.tl-line.sp-m{color:#0f766e;}
+.tl-line.sp-w{color:#be185d;}
+.bottombar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:20;box-shadow:0 -2px 12px rgba(0,0,0,.05);}
+.bb-left{display:flex;flex-direction:column;font-size:13px;color:var(--muted);}
+.score-big{font-size:20px;font-weight:800;color:var(--text);}
+.score-sub{font-size:12px;}
+.bb-right{display:flex;align-items:center;gap:8px;}
+.err-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;color:var(--red);}
+.help h2{font-size:16px;}
+.help p{margin:8px 0;font-size:14px;color:#374151;}
+.help b{color:var(--text);}
+.scards{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px;}
+.scard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+.scard .v{font-size:22px;font-weight:800;color:var(--accent);}
+.scard .k{font-size:12.5px;color:var(--muted);}
+.table-wrap{overflow-x:auto;}
+.st-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:600px;}
+.st-table th,.st-table td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;white-space:nowrap;}
+.st-table th{color:var(--muted);font-weight:600;font-size:12.5px;}
+.st-table tr.clickable{cursor:pointer;}
+.st-table tr.clickable:hover{background:#f8fafc;}
+.board-empty{grid-column:1/-1;color:var(--muted);font-size:13.5px;padding:8px 2px;}
+body.theme-warm{--accent:#ea580c;--accent-2:#c2410c;}
+body.theme-warm .hero{background:linear-gradient(135deg,#f97316,#b91c1c);}
+body.theme-warm .q-num{background:#ffedd5;}
+body.theme-warm .search-wrap input:focus{box-shadow:0 0 0 3px rgba(234,88,12,.12);}
+.paper.zt{border-color:#fed7aa;background:linear-gradient(135deg,#fff7ed,#ffffff);}
+.paper.zt:hover{border-color:#fdba74;box-shadow:0 6px 18px rgba(234,88,12,.12);}
+body.theme-jinjie{--accent:#7c3aed;--accent-2:#6d28d9;}
+body.theme-jinjie .hero{background:linear-gradient(135deg,#8b5cf6,#6d28d9);}
+body.theme-jinjie .q-num{background:#ede9fe;}
+body.theme-jinjie .search-wrap input:focus{box-shadow:0 0 0 3px rgba(124,58,237,.14);}
+.paper.jj{border-color:#ddd6fe;background:linear-gradient(135deg,#f5f3ff,#ffffff);}
+.paper.jj:hover{border-color:#c4b5fd;box-shadow:0 6px 18px rgba(124,58,237,.14);}
+@media (max-width:480px){.hero h1{font-size:21px;}.papers{grid-template-columns:1fr 1fr;}.opt{font-size:14px;}.scards{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="data.js"></script>
+<script src="mock.js"></script>
+<script src="data_shizhan.js"></script>
+<script src="data_jinjie.js"></script>
+<script>
+(function () {
+  'use strict';
+  var REAL = window.EXAM_DATA || [];
+  var MOCK = window.MOCK_DATA || [];
+  var SHIZHAN = window.SHIZHAN_DATA || [];
+  var JINJIE = window.JINJIE_DATA || [];
+  var app = document.getElementById('app');
+  var ALL = [];
+  REAL.forEach(function (r, i) {
+    ALL.push({ id: 'r' + i, src: 'real', year: r.year, paper: r.paper, note: r.note, audio: r.audio, durationSec: r.durationSec, sections: r.sections, transcriptText: r.transcript, qPages: null, tPages: null });
+  });
+  MOCK.forEach(function (m) {
+    ALL.push({ id: m.key, src: 'mock', year: m.year, paper: m.paper, name: m.name, source: m.source, note: null, audio: m.audio, durationSec: m.durationSec, sections: m.sections, transcriptText: null, qPages: m.qPages, tPages: m.tPages });
+  });
+  SHIZHAN.forEach(function (s) {
+    ALL.push({ id: s.key, src: 'shizhan', year: 0, paper: s.title, name: s.title, source: '实战考场', note: null, audio: s.audio, durationSec: s.durationSec, sections: s.sections, transcriptText: null, qPages: s.qPages, tPages: s.tPages, aPages: s.aPages });
+  });
+  JINJIE.forEach(function (s) {
+    ALL.push({ id: s.key, src: 'jinjie', year: 0, paper: s.title, name: s.title, source: '进阶突破', note: null, audio: s.audio, durationSec: s.durationSec, sections: s.sections, transcriptText: null, qPages: s.qPages, tPages: s.tPages, aPages: s.aPages, answerKey: s.answerKey });
+  });
+  if (!ALL.length) { app.innerHTML = '<div class="err-card">未找到数据文件（data.js / mock.js）。</div>'; return; }
+
+  var LS_KEY = 'TingLi_v3';
+  var LABELS = ['A', 'B', 'C'];
+  var state = newState();
+  var audio = null, searchTimer = null, prefillQuery = '';
+
+  function newState() { return { id: null, answers: [], graded: false, onlyWrong: false, tab: 'do', ab: { a: null, b: null, on: false }, rate: 1, query: '', wrongMap: {} }; }
+
+  function loadStore() { try { var s = localStorage.getItem(LS_KEY); if (s) { var o = JSON.parse(s); if (o && o.papers) return o; } } catch (e) {} return { papers: {} }; }
+  var store = loadStore();
+  function saveStore() { try { localStorage.setItem(LS_KEY, JSON.stringify(store)); } catch (e) {} }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function fmtScore(n) { return String(Math.round(n * 10) / 10); }
+  function fmtT(s) { var m = Math.floor(s / 60), ss = Math.floor(s % 60); return m + ':' + (ss < 10 ? '0' : '') + ss; }
+  function findSet(id) { for (var i = 0; i < ALL.length; i++) if (ALL[i].id === id) return ALL[i]; return null; }
+  function questionsOf(s) { var out = []; (s.sections || []).forEach(function (sec) { sec.questions.forEach(function (q) { out.push(q); }); }); return out; }
+
+  function paperStats(id) {
+    var p = store.papers[id];
+    if (!p || !p.attempts || !p.attempts.length) return null;
+    var attempts = p.attempts.length, total = 0, best = 0, wrongMap = {};
+    p.attempts.forEach(function (a) { total += a.correct; if (a.score > best) best = a.score; (a.wrong || []).forEach(function (n) { wrongMap[n] = (wrongMap[n] || 0) + 1; }); });
+    var last = p.attempts[p.attempts.length - 1].score;
+    var wrongList = Object.keys(wrongMap).map(function (k) { return parseInt(k, 10); }).sort(function (a, b) { return a - b; });
+    return { attempts: attempts, total: total, acc: total / (attempts * 20) * 100, best: best, last: last, wrongMap: wrongMap, wrongList: wrongList };
+  }
+  function highlight(text, q) {
+    var lower = text.toLowerCase(), ql = q.toLowerCase(), out = '', i = 0;
+    for (;;) { var p = lower.indexOf(ql, i); if (p < 0) { out += esc(text.slice(i)); break; } out += esc(text.slice(i, p)) + '<mark>' + esc(text.slice(p, p + ql.length)) + '</mark>'; i = p + ql.length; }
+    return out;
+  }
+
+  (function () {
+    var qm = (location.search || '').match(/[?&]q=([^&]*)/); if (qm) { try { prefillQuery = decodeURIComponent(qm[1]); } catch (e) { prefillQuery = qm[1]; } }
+    var m = (location.hash || '').match(/^#s([A-Za-z0-9_-]+)$/);
+    if (m && findSet(m[1])) { state.id = m[1]; renderSet(m[1]); return; }
+    renderHome();
+  })();
+
+  function renderHome() {
+    state = newState();
+    setTheme(false);
+    if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    var done = 0, total = 0, correct = 0, sumLast = 0;
+    ALL.forEach(function (s) { var st = paperStats(s.id); if (st) { done++; total += st.attempts; correct += st.total; sumLast += st.last; } });
+    var acc = total ? Math.round(correct / (total * 20) * 100) : 0, avg = done ? sumLast / done : 0;
+    var html = '';
+    html += '<div class="hero"><h1>🎧 高考英语听力练习</h1><p>2018–2026 全国卷听力真题 · 每套 20 题 / 满分 30</p>';
+    html += '<div class="stats"><span>已练 ' + done + ' 套</span><span>平均分 ' + fmtScore(avg) + '</span><span>正确率 ' + acc + '%</span></div>';
+    html += '<div class="hero-actions"><button class="btn" data-act="stats">📊 统计面板</button><button class="btn" data-act="help">📖 使用说明</button></div></div>';
+    html += '<div class="search-wrap"><input id="search" type="search" placeholder="搜索试卷 / 题目，例如：weather / 甲卷 / 2020" autocomplete="off"></div>';
+    html += '<div id="home-body"></div>';
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+    try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+    if (prefillQuery) { var si = document.getElementById('search'); if (si) si.value = prefillQuery; state.query = prefillQuery; prefillQuery = ''; renderSearchResults(); }
+    else renderHomeBody();
+  }
+
+  function cardHTML(s) {
+    var st = paperStats(s.id);
+    var dur = Math.round(s.durationSec / 60);
+    var title = esc(s.paper);
+    if (s.src !== 'mock' && s.note) title += ' <span class="badge">同一套</span>';
+    if (s.src === 'shizhan') title += ' <span class="badge">专题</span>';
+    if (s.src === 'jinjie') title += ' <span class="badge src">进阶</span>';
+    var h = '<button class="paper" data-act="open" data-id="' + s.id + '">';
+    h += '<div class="paper-t">' + title + '</div>';
+    h += '<div class="paper-m">约 ' + dur + ' 分钟 · 20 题</div>';
+    if (st) { h += '<div class="paper-s"><span class="done">已做 ' + st.attempts + ' 次</span> · 正确率 ' + Math.round(st.acc) + '% · 上次 ' + fmtScore(st.last) + '/30' + (st.wrongList.length ? ' · <span class="wrong">错题 ' + st.wrongList.length + ' 道</span>' : '') + '</div>'; }
+    else h += '<div class="paper-s"><span class="todo">未做过</span></div>';
+    h += '</button>';
+    return h;
+  }
+
+  function renderHomeBody() {
+    var body = document.getElementById('home-body'); if (!body) return;
+    var html = '';
+    if (JINJIE.length || SHIZHAN.length) {
+      html += '<div class="year"><div class="year-h">📘 专题练习</div><div class="papers">';
+      if (JINJIE.length) html += '<button class="paper jj" data-act="jinjie"><div class="paper-t">🚀 进阶突破</div><div class="paper-m">' + JINJIE.length + ' 套 · 音频 + 在线作答 + 自动判分</div><div class="paper-s"><span class="done">进入 →</span></div></button>';
+      if (SHIZHAN.length) html += '<button class="paper zt" data-act="shizhan"><div class="paper-t">🎯 实战考场</div><div class="paper-m">' + SHIZHAN.length + ' 套全真模拟听力 · 在线作答 + 自动判分</div><div class="paper-s"><span class="done">进入 →</span></div></button>';
+      html += '</div></div>';
+    }
+    var years = []; ALL.forEach(function (s) { if (s.src !== 'shizhan' && s.src !== 'jinjie' && years.indexOf(s.year) < 0) years.push(s.year); }); years.sort(function (a, b) { return b - a; });
+    years.forEach(function (y) {
+      html += '<div class="year"><div class="year-h">' + y + ' 年</div><div class="papers">';
+      ALL.forEach(function (s) { if (s.year === y && s.src !== 'shizhan' && s.src !== 'jinjie') html += cardHTML(s); });
+      html += '</div></div>';
+    });
+    body.innerHTML = html;
+  }
+
+  function renderSearchResults() {
+    var body = document.getElementById('home-body'); if (!body) return;
+    var tq = state.query.trim(); if (!tq) { renderHomeBody(); return; }
+    var sets = [], qs = [];
+    var ql = tq.toLowerCase();
+    ALL.forEach(function (s) {
+      if (((s.src === 'shizhan' || s.src === 'jinjie' ? '' : s.year + ' ') + s.paper + ' ' + (s.name || '')).toLowerCase().indexOf(ql) >= 0) sets.push(s);
+      questionsOf(s).forEach(function (qq) {
+        var stem = qq.stem.toLowerCase().indexOf(ql) >= 0, opt = false;
+        qq.options.forEach(function (o) { if (o.toLowerCase().indexOf(ql) >= 0) opt = true; });
+        if (stem || opt) qs.push({ s: s, q: qq });
+      });
+    });
+    qs = qs.slice(0, 60);
+    var html = '';
+    html += '<div class="sr-sec">试卷<span class="count">' + sets.length + '</span></div>';
+    if (sets.length) { html += '<div class="papers">'; sets.forEach(function (s) { html += cardHTML(s); }); html += '</div>'; } else html += '<div class="sr-empty">没有匹配的试卷</div>';
+    html += '<div class="sr-sec">题目<span class="count">' + qs.length + '</span></div>';
+    if (qs.length) {
+      html += '<div class="qlist">';
+      qs.forEach(function (it) {
+        html += '<button class="qitem" data-act="qopen" data-id="' + it.s.id + '" data-q="' + it.q.n + '"><div class="qi-top"><span class="qi-p">' + ((it.s.src === 'shizhan' || it.s.src === 'jinjie') ? '' : it.s.year + ' ') + esc(it.s.paper) + '</span><span>第 ' + it.q.n + ' 题</span></div><div class="qi-s">' + highlight(it.q.stem, tq) + '</div></button>';
+      });
+      html += '</div>';
+    } else html += '<div class="sr-empty">没有匹配的题目</div>';
+    body.innerHTML = html;
+  }
+
+  var szTab = 'q';
+  function setTheme(mode) { var warm = (mode === true || mode === 'warm'); var jj = (mode === 'jinjie'); document.body.classList.toggle('theme-warm', warm); document.body.classList.toggle('theme-jinjie', jj); }
+
+  function imgsHTML(pages) { var h = ''; (pages || []).forEach(function (p) { h += '<img class="page-img" loading="lazy" src="' + encodeURI(p) + '" alt="page">'; }); return h; }
+
+  function renderShizhan() {
+    state = newState();
+    if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    setTheme(true);
+    var done = 0; SHIZHAN.forEach(function (s) { if (paperStats(s.key)) done++; });
+    var html = '';
+    html += '<div class="topbar"><button class="btn ghost" data-act="home">← 返回</button><div class="topbar-t"><div class="t1">实战考场</div><div class="t2">' + SHIZHAN.length + ' 套全真模拟听力</div></div></div>';
+    html += '<div class="hero"><h1>🎯 实战考场</h1><p>全真模拟考场听力 · 在线作答 + 自动判分 + 试题 / 原文 / 答案扫描</p><div class="stats"><span>共 ' + SHIZHAN.length + ' 套</span><span>已做 ' + done + ' 套</span></div></div>';
+    html += '<div class="year"><div class="year-h">模拟套题</div><div class="papers">';
+    SHIZHAN.forEach(function (s) {
+      var st = paperStats(s.key);
+      html += '<button class="paper" data-act="open" data-id="' + s.key + '">';
+      html += '<div class="paper-t">' + esc(s.title) + '</div>';
+      html += '<div class="paper-m">约 ' + Math.round(s.durationSec / 60) + ' 分钟 · 20 题</div>';
+      html += st ? '<div class="paper-s"><span class="done">已做 ' + st.attempts + ' 次</span> · 上次 ' + fmtScore(st.last) + '/30</div>' : '<div class="paper-s"><span class="todo">未做过</span></div>';
+      html += '</button>';
+    });
+    html += '</div></div>';
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+  }
+
+  function renderShizhanView(key) {
+    var s = null; SHIZHAN.forEach(function (x) { if (x.key === key) s = x; });
+    if (!s) return;
+    state = newState(); state.id = key;
+    if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    setTheme(true);
+    var st = paperStats(key);
+    var html = '';
+    html += '<div class="topbar"><button class="btn ghost" data-act="shizhan">← 返回</button><div class="topbar-t"><div class="t1">' + esc(s.title) + '</div><div class="t2">约 ' + Math.round(s.durationSec / 60) + ' 分钟 · 20 题' + (st ? ' · 已做 ' + st.attempts + ' 次' : '') + '</div></div></div>';
+    html += '<div class="player-card"><audio id="player" controls preload="metadata" playsinline></audio><div class="prow">';
+    [0.75, 0.9, 1, 1.1, 1.25].forEach(function (v) { html += '<button class="chip rate" data-act="rate" data-v="' + v + '">' + v + '×</button>'; });
+    html += '<span class="sep"></span><button class="chip" data-act="abA">设 A 点</button><button class="chip" data-act="abB">设 B 点</button><button class="chip" data-act="abClr">清除循环</button><span class="abinfo" id="abinfo">未设循环</span></div>';
+    html += '<div class="audiohint" id="audiohint">无法加载音频，请确认「实战考场」文件夹与 app 保持原目录结构，或改用「启动服务器.bat」。</div></div>';
+    szTab = 'q';
+    html += '<div class="tabs"><button class="tab active" data-act="sztab" data-tab="q">试题</button><button class="tab" data-act="sztab" data-tab="t">原文</button><button class="tab" data-act="sztab" data-tab="a">答案</button></div>';
+    html += '<div id="szbody"></div>';
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+    audio = document.getElementById('player');
+    if (audio) { audio.src = encodeURI(s.audio); audio.playbackRate = state.rate; audio.addEventListener('timeupdate', loopCheck); audio.addEventListener('error', function () { var el = document.getElementById('audiohint'); if (el) el.style.display = 'block'; }); }
+    markRate();
+    renderSzTab(s);
+  }
+
+  function renderSzTab(s) {
+    var body = document.getElementById('szbody'); if (!body) return;
+    var tabs = document.querySelectorAll('#app .tab'); for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === szTab);
+    if (szTab === 'q') body.innerHTML = '<div class="hint">试题扫描（共 2 页，可双指 / 滚轮放大查看）</div>' + imgsHTML(s.qPages);
+    else if (szTab === 't') body.innerHTML = '<div class="hint">听力原文扫描（套题起始页可能带有上一套的结尾，请从本套 Text 1 开始查看）</div>' + imgsHTML(s.tPages);
+    else body.innerHTML = '<div class="hint">答案速查表（实战考场一 ~ 二见第 1 张，三 ~ 十见第 2 张，在表中找到对应套题位置即可）</div>' + imgsHTML(s.aPages);
+  }
+
+  function renderJinjie() {
+    state = newState();
+    if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    setTheme('jinjie');
+    var html = '';
+    html += '<div class="topbar"><button class="btn ghost" data-act="home">← 返回</button><div class="topbar-t"><div class="t1">进阶突破</div><div class="t2">' + JINJIE.length + ' 套进阶听力</div></div></div>';
+    html += '<div class="hero"><h1>🚀 进阶突破</h1><p>高考英语听力进阶突破 · 精听训练 · 逐套攻克</p><div class="stats"><span>共 ' + JINJIE.length + ' 套</span></div></div>';
+    html += '<div class="year"><div class="year-h">进阶套题</div><div class="papers">';
+    JINJIE.forEach(function (s) {
+      var st = paperStats(s.key);
+      html += '<button class="paper" data-act="open" data-id="' + s.key + '">';
+      html += '<div class="paper-t">' + esc(s.title) + '</div>';
+      html += '<div class="paper-m">约 ' + Math.round(s.durationSec / 60) + ' 分钟 · 20 题</div>';
+      html += st ? '<div class="paper-s"><span class="done">已练 ' + st.attempts + ' 次</span></div>' : '<div class="paper-s"><span class="todo">未做过</span></div>';
+      html += '</button>';
+    });
+    html += '</div></div>';
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+  }
+
+  var jjTab = 'q';
+  function renderJinjieView(key) {
+    var s = null; JINJIE.forEach(function (x) { if (x.key === key) s = x; });
+    if (!s) return;
+    state = newState(); state.id = key;
+    if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    setTheme('jinjie');
+    var html = '';
+    html += '<div class="topbar"><button class="btn ghost" data-act="jinjie">← 返回</button><div class="topbar-t"><div class="t1">' + esc(s.title) + '</div><div class="t2">约 ' + Math.round(s.durationSec / 60) + ' 分钟 · 20 题</div></div></div>';
+    html += '<div class="player-card"><audio id="player" controls preload="metadata" playsinline></audio><div class="prow">';
+    [0.75, 0.9, 1, 1.1, 1.25].forEach(function (v) { html += '<button class="chip rate" data-act="rate" data-v="' + v + '">' + v + '×</button>'; });
+    html += '<span class="sep"></span><button class="chip" data-act="abA">设 A 点</button><button class="chip" data-act="abB">设 B 点</button><button class="chip" data-act="abClr">清除循环</button><span class="abinfo" id="abinfo">未设循环</span></div>';
+    html += '<div class="audiohint" id="audiohint">无法加载音频，请确认「进阶突破/音频」文件夹与 app 保持原目录结构，或改用「启动服务器.bat」。</div></div>';
+    jjTab = 'q';
+    html += '<div class="tabs"><button class="tab active" data-act="jjtab" data-tab="q">试题</button><button class="tab" data-act="jjtab" data-tab="t">原文</button><button class="tab" data-act="jjtab" data-tab="a">答案</button></div>';
+    html += '<div id="jjbody"></div>';
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+    audio = document.getElementById('player');
+    if (audio) { audio.src = encodeURI(s.audio); audio.playbackRate = state.rate; audio.addEventListener('timeupdate', loopCheck); audio.addEventListener('error', function () { var h = document.getElementById('audiohint'); if (h) h.style.display = 'block'; }); }
+    markRate(); renderJjTab(s);
+  }
+
+  function renderJjTab(s) {
+    var body = document.getElementById('jjbody'); if (!body) return;
+    var tabs = document.querySelectorAll('#app .tab'); for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === jjTab);
+    if (jjTab === 'q') body.innerHTML = '<div class="hint">试题扫描（共 ' + s.qPages.length + ' 页，可双指 / 滚轮放大查看）</div>' + imgsHTML(s.qPages);
+    else if (jjTab === 't') body.innerHTML = '<div class="hint">听力原文扫描（套题起始页可能带有上一套的结尾，请从本套 Text 1 开始查看）</div>' + imgsHTML(s.tPages);
+    else {
+      var ak = s.answerKey || '';
+      var akHtml = ak ? '<div class="sec"><h2>本套答案速查 <span class="sec-sub">OCR 识别</span></h2><p class="intro">1–5 <b>' + ak.slice(0, 5) + '</b>　6–10 <b>' + ak.slice(5, 10) + '</b>　11–15 <b>' + ak.slice(10, 15) + '</b>　16–20 <b>' + ak.slice(15, 20) + '</b></p></div>' : '';
+      body.innerHTML = '<div class="hint">答案速查表（PART 2「进阶突破」见第 1~4 张，在表中找到对应套题位置即可）</div>' + akHtml + imgsHTML(s.aPages);
+    }
+  }
+
+  function renderHelp() {
+    state = newState();
+    setTheme(false);
+    var html = '';
+    html += '<div class="topbar"><button class="btn ghost" data-act="home">← 返回</button><div class="topbar-t"><div class="t1">使用说明</div></div></div>';
+    html += '<div class="sec help"><h2>💻 电脑上练习</h2><p>用 Chrome / Edge 打开 app 文件夹里的 <b>index.html</b> 即可；也可双击 <b>启动服务器.bat</b>。</p></div>';
+    html += '<div class="sec help"><h2>📱 手机上练习</h2><p><b>方式一（推荐）：</b>电脑和手机连同一 Wi-Fi，电脑双击 <b>启动服务器.bat</b>，手机浏览器打开 <b>http://电脑IP:8000/app/</b>。</p><p><b>方式二：</b>整个「英语听力」文件夹复制到手机，打开 <b>app/index.html</b>。</p></div>';
+    html += '<div class="sec help"><h2>🎯 练习功能</h2><p>首页<b>第一板块为「专题练习」</b>：<b>「进阶突破」</b>30 套进阶听力（可在线点选作答、<b>自动判分</b>、看错题，支持倍速与 A-B 循环精听，并查看<b>试题 / 原文 / 答案扫描页</b>），以及<b>「实战考场」</b>10 套模拟听力（可在线作答、自动判分、看错题，并查看试题 / 原文 / 答案扫描）。下方按<b>年份</b>列出全部真题。每套可在线点选作答、<b>自动判分</b>、看错题；同时保留<b>试题扫描图片</b>与<b>听力原文</b>（部分试卷原文为扫描图）。</p><p>音频支持倍速与 A-B 循环精听；成绩、正确率、错题保存在本机浏览器。</p></div>';
+    html += '<div class="sec help"><h2>⚠️ 提示</h2><p>音频较大，建议 Wi-Fi；记录存本地浏览器，清除数据会清空。本资料仅供学习，版权归原机构所有。</p></div>';
+    html += '<div class="foot"><button class="btn ghost" data-act="home">← 返回首页</button></div>';
+    app.innerHTML = html; window.scrollTo(0, 0);
+  }
+
+  function renderStats() {
+    state = newState(); setTheme(false); if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    var done = 0, total = 0, correct = 0, sumLast = 0, bestAll = 0, wrongEntries = [], rows = '';
+    ALL.forEach(function (s) {
+      var st = paperStats(s.id); if (!st) return;
+      done++; total += st.attempts; correct += st.total; sumLast += st.last; if (st.best > bestAll) bestAll = st.best;
+      rows += '<tr class="clickable" data-act="open" data-id="' + s.id + '"><td>' + ((s.src === 'shizhan' || s.src === 'jinjie') ? '' : s.year + ' ') + esc(s.paper) + '</td><td>' + st.attempts + '</td><td>' + fmtScore(st.last) + '</td><td>' + fmtScore(st.best) + '</td><td>' + Math.round(st.acc) + '%</td><td>' + (st.wrongList.length ? st.wrongList.join('、') : '—') + '</td></tr>';
+      st.wrongList.forEach(function (n) { wrongEntries.push({ s: s, q: n, c: st.wrongMap[n] }); });
+    });
+    wrongEntries.sort(function (a, b) { return b.c - a.c; });
+    var acc = total ? Math.round(correct / (total * 20) * 100) : 0, avg = done ? sumLast / done : 0;
+    var html = '<div class="topbar"><button class="btn ghost" data-act="home">← 返回</button><div class="topbar-t"><div class="t1">统计面板</div></div></div>';
+    html += '<div class="scards">' + scard('已练套数', done) + scard('练习总次数', total) + scard('总体正确率', acc + '%') + scard('平均得分(最近)', fmtScore(avg)) + scard('最高得分', fmtScore(bestAll)) + scard('错题数(不重复)', wrongEntries.length) + '</div>';
+    if (!done) html += '<div class="sec"><p class="sr-empty">还没有练习记录，先去首页练一套吧。</p></div>';
+    else {
+      html += '<div class="sec"><h2>每套试卷</h2><div class="table-wrap"><table class="st-table"><thead><tr><th>试卷</th><th>次数</th><th>上次</th><th>最高</th><th>正确率</th><th>错题题号</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
+      html += '<div class="sec"><h2>错题回顾</h2><div class="qlist">';
+      wrongEntries.slice(0, 60).forEach(function (e) {
+        html += '<button class="qitem" data-act="qopen" data-id="' + e.s.id + '" data-q="' + e.q + '"><div class="qi-top"><span class="qi-p">' + ((e.s.src === 'shizhan' || e.s.src === 'jinjie') ? '' : e.s.year + ' ') + esc(e.s.paper) + '</span><span>第 ' + e.q + ' 题 · 错 ' + e.c + ' 次</span></div><div class="qi-s">' + esc(questionsOf(e.s)[e.q - 1].stem) + '</div></button>';
+      });
+      html += '</div></div>';
+    }
+    html += '<div class="foot"><button class="btn ghost" data-act="resetStats">🗑 清空全部记录</button></div>';
+    app.innerHTML = html; window.scrollTo(0, 0);
+  }
+  function scard(k, v) { return '<div class="scard"><div class="v">' + v + '</div><div class="k">' + k + '</div></div>'; }
+
+  function renderSet(id, focusQ) {
+    var s = findSet(id); if (!s) return;
+    state = newState(); state.id = id; setTheme(s.src === 'shizhan' ? true : (s.src === 'jinjie' ? 'jinjie' : false));
+    var all = questionsOf(s); all.forEach(function (q) { state.answers[q.n - 1] = null; });
+    var st = paperStats(id); state.wrongMap = st ? st.wrongMap : {};
+    var dur = Math.round(s.durationSec / 60);
+    var html = '';
+    html += '<div class="topbar"><button class="btn ghost" data-act="' + (s.src === 'shizhan' ? 'shizhan' : (s.src === 'jinjie' ? 'jinjie' : 'home')) + '">← 返回</button><div class="topbar-t"><div class="t1">' + ((s.src === 'shizhan' || s.src === 'jinjie') ? '' : s.year + '年 ') + esc(s.paper) + '</div><div class="t2">20 小题 · 约 ' + dur + ' 分钟' + (st ? ' · 已做 ' + st.attempts + ' 次 · 上次 ' + fmtScore(st.last) + '/30' : '') + '</div></div></div>';
+    html += '<div class="player-card"><audio id="player" controls preload="metadata" playsinline></audio><div class="prow">';
+    [0.75, 0.9, 1, 1.1, 1.25].forEach(function (v) { html += '<button class="chip rate" data-act="rate" data-v="' + v + '">' + v + '×</button>'; });
+    html += '<span class="sep"></span><button class="chip" data-act="abA">设 A 点</button><button class="chip" data-act="abB">设 B 点</button><button class="chip" data-act="abClr">清除循环</button><span class="abinfo" id="abinfo">未设循环</span></div>';
+    html += '<div class="audiohint" id="audiohint">无法加载音频，请确认音频文件夹与 app 保持原目录结构，或改用「启动服务器.bat」。</div></div>';
+    html += '<div class="tabs" id="tabs"><button class="tab active" data-act="tab" data-tab="do">做题</button>' + (s.qPages ? '<button class="tab" data-act="tab" data-tab="qimg">试题图片</button>' : '') + (s.aPages ? '<button class="tab" data-act="tab" data-tab="answer">答案</button>' : '') + '<button class="tab" data-act="tab" data-tab="trans">听力原文</button></div>';
+    html += '<div id="tabbody"></div>';
+    html += '<div class="bottombar" id="bottombar"></div>';
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+    audio = document.getElementById('player');
+    if (audio) { audio.src = encodeURI(s.audio); audio.playbackRate = state.rate; audio.addEventListener('timeupdate', loopCheck); audio.addEventListener('error', function () { var h = document.getElementById('audiohint'); if (h) h.style.display = 'block'; }); }
+    markRate(); renderTab();
+    if (focusQ) { setTimeout(function () { var el = document.getElementById('q-' + focusQ); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1800); } }, 80); }
+  }
+
+  function renderQuestionsHTML(s) {
+    var html = '';
+    (s.sections || []).forEach(function (sec) {
+      html += '<div class="sec"><h2>' + sec.name + ' <span class="sec-sub">' + sec.questions.length + ' 小题</span></h2><p class="intro">' + esc(sec.intro) + '</p>';
+      sec.questions.forEach(function (q) {
+        var mine = state.answers[q.n - 1], rightIdx = LABELS.indexOf(q.answer), cls = 'q';
+        if (state.graded) cls += (mine === rightIdx ? ' correct' : ' wrong');
+        var hw = state.wrongMap && state.wrongMap[q.n] ? ' had-wrong' : '';
+        html += '<div class="' + cls + '" id="q-' + q.n + '">';
+        html += '<div class="q-head"><span class="q-num' + hw + '">' + q.n + '</span><div class="q-stem">' + esc(q.stem) + '</div></div><div class="opts">';
+        q.options.forEach(function (opt, oi) {
+          var ocls = 'opt'; if (mine === oi) ocls += ' sel'; if (state.graded && oi === rightIdx) ocls += ' answer';
+          html += '<button class="' + ocls + '" data-act="opt" data-q="' + q.n + '" data-opt="' + oi + '"><span class="ol">' + LABELS[oi] + '</span><span class="ot">' + esc(opt) + '</span></button>';
+        });
+        html += '</div><div class="q-result">' + (state.graded ? (mine === rightIdx ? '✓ 正确' : '你的答案 ' + (mine == null ? '未作答' : LABELS[mine]) + ' · 正确答案 ' + q.answer) : '') + '</div></div>';
+      });
+      html += '</div>';
+    });
+    return html;
+  }
+  function imgBlock(pages) { var h = '<div class="hint">扫描图片（可双指放大查看）</div>'; (pages || []).forEach(function (p) { h += '<img class="page-img" loading="lazy" src="' + encodeURI(p) + '" alt="page">'; }); return h; }
+  function transcriptTextHTML(s) {
+    var h = '<div class="transcript"><h2>听力原文</h2>';
+    s.transcriptText.forEach(function (t) { h += '<details><summary>Text ' + t.id + '</summary><div class="tl">'; t.lines.forEach(function (ln) { var cls = ln.indexOf('M:') === 0 ? 'sp-m' : (ln.indexOf('W:') === 0 ? 'sp-w' : ''); h += '<p class="tl-line ' + cls + '">' + esc(ln) + '</p>'; }); h += '</div></details>'; });
+    h += '</div>'; return h;
+  }
+
+  function renderTab() {
+    var s = findSet(state.id); if (!s) return;
+    var tb = document.getElementById('tabbody'); if (!tb) return;
+    var tabs = document.querySelectorAll('.tab'); for (var i = 0; i < tabs.length; i++) tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === state.tab);
+    if (state.tab === 'do') tb.innerHTML = renderQuestionsHTML(s);
+    else if (state.tab === 'qimg') tb.innerHTML = imgBlock(s.qPages);
+    else if (state.tab === 'answer') { var ak = s.answerKey || ''; var akh = ak ? '<div class="sec"><h2>本套答案速查 <span class="sec-sub">OCR 识别</span></h2><p class="intro">1–5 <b>' + ak.slice(0, 5) + '</b>　6–10 <b>' + ak.slice(5, 10) + '</b>　11–15 <b>' + ak.slice(10, 15) + '</b>　16–20 <b>' + ak.slice(15, 20) + '</b></p></div>' : ''; tb.innerHTML = akh + imgBlock(s.aPages); }
+    else tb.innerHTML = s.transcriptText ? transcriptTextHTML(s) : imgBlock(s.tPages);
+    if (state.tab === 'do' && state.onlyWrong) tb.classList.add('filter-wrong'); else tb.classList.remove('filter-wrong');
+    renderBottombar(s);
+  }
+
+  function renderBottombar(s) {
+    var bar = document.getElementById('bottombar'); if (!bar) return;
+    if (state.tab !== 'do') { bar.style.display = 'none'; return; }
+    bar.style.display = 'flex';
+    var answered = 0; state.answers.forEach(function (a) { if (a != null) answered++; });
+    if (!state.graded) {
+      bar.innerHTML = '<div class="bb-left"><span id="answered">已答 ' + answered + '/20</span></div><div class="bb-right"><button class="btn ghost" data-act="reveal">直接看答案</button><button class="btn primary" data-act="submit">提交并判分</button></div>';
+    } else {
+      var all = questionsOf(s), correct = 0; all.forEach(function (q) { if (state.answers[q.n - 1] === LABELS.indexOf(q.answer)) correct++; });
+      bar.innerHTML = '<div class="bb-left"><span class="score-big">' + fmtScore(correct * 1.5) + ' / 30</span><span class="score-sub">答对 ' + correct + ' 题</span></div><div class="bb-right"><button class="chip' + (state.onlyWrong ? ' active' : '') + '" data-act="wrongOnly">只看错题</button><button class="btn primary" data-act="redo">重新练习</button></div>';
+    }
+  }
+
+  function grade() {
+    if (state.graded) return;
+    var s = findSet(state.id); if (!s) return;
+    var all = questionsOf(s), correct = 0, wrong = [];
+    all.forEach(function (q) { if (state.answers[q.n - 1] === LABELS.indexOf(q.answer)) correct++; else wrong.push(q.n); });
+    state.graded = true;
+    var p = store.papers[state.id] || { attempts: [] };
+    p.attempts.push({ date: Date.now(), score: correct * 1.5, correct: correct, wrong: wrong });
+    if (p.attempts.length > 100) p.attempts = p.attempts.slice(-100);
+    store.papers[state.id] = p; saveStore();
+    var st = paperStats(state.id); state.wrongMap = st ? st.wrongMap : {};
+    renderTab();
+    window.scrollTo(0, 0);
+  }
+
+  function toggleWrongOnly() { state.onlyWrong = !state.onlyWrong; renderTab(); }
+
+  function loopCheck() { if (state.ab.on && state.ab.b != null && audio && audio.currentTime >= state.ab.b) audio.currentTime = state.ab.a == null ? 0 : state.ab.a; }
+  function markRate() { var chips = document.querySelectorAll('.rate'); for (var i = 0; i < chips.length; i++) { var v = parseFloat(chips[i].getAttribute('data-v')); if (v === state.rate) chips[i].classList.add('active'); else chips[i].classList.remove('active'); } }
+  function updateAb() { var el = document.getElementById('abinfo'); if (!el) return; var a = state.ab.a, b = state.ab.b; if (a == null && b == null) { el.textContent = '未设循环'; return; } if (a != null && b == null) { el.textContent = 'A 点 ' + fmtT(a) + ' · 请设 B 点'; return; } el.textContent = state.ab.on ? ('循环 ' + fmtT(a) + ' – ' + fmtT(b)) : ('已设 A ' + fmtT(a) + ' · B ' + fmtT(b)); }
+
+  app.addEventListener('click', function (ev) {
+    var t = ev.target;
+    while (t && t !== app && !t.getAttribute('data-act')) t = t.parentElement;
+    if (!t || t === app) return;
+    var act = t.getAttribute('data-act');
+    if (act === 'home') { renderHome(); return; }
+    if (act === 'help') { renderHelp(); return; }
+    if (act === 'stats') { renderStats(); return; }
+    if (act === 'jinjie') { renderJinjie(); return; }
+    if (act === 'jjopen') { renderJinjieView(t.getAttribute('data-id')); return; }
+    if (act === 'shizhan') { renderShizhan(); return; }
+    if (act === 'szopen') { renderShizhanView(t.getAttribute('data-id')); return; }
+    if (act === 'jjtab') { jjTab = t.getAttribute('data-tab'); var jjs = null; JINJIE.forEach(function (x) { if (x.key === state.id) jjs = x; }); if (jjs) renderJjTab(jjs); return; }
+    if (act === 'sztab') { szTab = t.getAttribute('data-tab'); var szs = null; SHIZHAN.forEach(function (x) { if (x.key === state.id) szs = x; }); if (szs) renderSzTab(szs); return; }
+    if (act === 'open') { renderSet(t.getAttribute('data-id')); return; }
+    if (act === 'qopen') { renderSet(t.getAttribute('data-id'), parseInt(t.getAttribute('data-q'), 10)); return; }
+    if (act === 'tab') { state.tab = t.getAttribute('data-tab'); renderTab(); return; }
+    if (act === 'opt') {
+      if (state.graded) return;
+      var qn = parseInt(t.getAttribute('data-q'), 10), oi = parseInt(t.getAttribute('data-opt'), 10);
+      state.answers[qn - 1] = oi;
+      var card = document.getElementById('q-' + qn);
+      if (card) { var os = card.querySelectorAll('.opt'); for (var i = 0; i < os.length; i++) { if (parseInt(os[i].getAttribute('data-opt'), 10) === oi) os[i].classList.add('sel'); else os[i].classList.remove('sel'); } }
+      var an = document.getElementById('answered'); if (an) { var c = 0; state.answers.forEach(function (a) { if (a != null) c++; }); an.textContent = '已答 ' + c + '/20'; }
+      return;
+    }
+    if (act === 'submit') { grade(); return; }
+    if (act === 'reveal') { grade(); return; }
+    if (act === 'redo') { renderSet(state.id); return; }
+    if (act === 'wrongOnly') { toggleWrongOnly(); return; }
+    if (act === 'resetStats') { if (confirm('确定清空全部练习记录吗？此操作不可恢复。')) { store.papers = {}; saveStore(); renderStats(); } return; }
+    if (act === 'rate') { var v = parseFloat(t.getAttribute('data-v')); state.rate = v; if (audio) audio.playbackRate = v; markRate(); return; }
+    if (act === 'abA') { if (!audio) return; state.ab.a = audio.currentTime; state.ab.on = false; updateAb(); return; }
+    if (act === 'abB') { if (!audio) return; state.ab.b = audio.currentTime; if (state.ab.a == null) state.ab.a = 0; state.ab.on = true; updateAb(); return; }
+    if (act === 'abClr') { state.ab.a = null; state.ab.b = null; state.ab.on = false; updateAb(); return; }
+  });
+
+  app.addEventListener('input', function (ev) {
+    if (ev.target && ev.target.id === 'search') { clearTimeout(searchTimer); var q = ev.target.value; searchTimer = setTimeout(function () { state.query = q; renderSearchResults(); }, 100); }
+  });
+
+})();
+</script>
+</body>
+</html>
